@@ -25,7 +25,7 @@ def get_date_range():
 
     to_date_str = input("To Date (dd/mm/yyyy): ")
     to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
-    
+
     print(f"From Date is {from_date_object}")
     print(f"To Date is {to_date_object}")
 
@@ -33,9 +33,17 @@ get_date_range()
 
 nav = SHEET.worksheet("net asset values")
 
-data = nav.get_all_values()
+def get_average_nav(nav):
+    data = nav.get_all_values()
+    header = data[0]
+    nav_index = header.index("Net Asset Value")
+    nav_values = [float(row[nav_index].replace(',', '')) for row in data[1:]]
+    average_nav = sum(nav_values) / len(nav_values)
+    return average_nav
 
-print(data)
+average_nav = get_average_nav(nav)
+print(f"The average NAV is: €{average_nav}")
+
 
 
     
