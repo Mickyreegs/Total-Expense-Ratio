@@ -36,6 +36,10 @@ print(f"To Date: {to_date}")
 nav = SHEET.worksheet("net asset values")
 
 def get_average_nav(nav):
+    """
+    Using the Net Asset Value column in the net asset values tab,
+    we iterate through the lists to extract all NAVs and get a single average figure
+    """
     data = nav.get_all_values()
     header = data[0]
     nav_index = header.index("Net Asset Value")
