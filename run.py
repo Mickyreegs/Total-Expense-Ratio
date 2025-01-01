@@ -20,13 +20,18 @@ def get_date_range():
     """
     print("Select date range for your TER:\n")
 
-    from_date_str = input("From Date (dd/mm/yyyy): ")
-    from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
+    while True:
+        try:
+            from_date_str = input("From Date (dd/mm/yyyy): ")
+            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
 
-    to_date_str = input("To Date (dd/mm/yyyy): ")
-    to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
+            to_date_str = input("To Date (dd/mm/yyyy): ")
+            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
 
-    return from_date_object, to_date_object
+            return from_date_object, to_date_object
+
+        except ValueError as e:
+            print(f"Invalid date format: {e}.  Please enter the date as dd/mm/yyyy.")
 
 
 from_date, to_date = get_date_range()
