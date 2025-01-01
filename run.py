@@ -18,7 +18,7 @@ def get_date_range():
     """
     Get the date range specified by the user to build the report
     """
-    print("Select date range for your TER:")
+    print("Select date range for your TER:\n")
 
     from_date_str = input("From Date (dd/mm/yyyy): ")
     from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
@@ -31,7 +31,7 @@ def get_date_range():
 
 from_date, to_date = get_date_range()
 print(f"From Date: {from_date}")
-print(f"To Date: {to_date}")
+print(f"To Date: {to_date}\n")
 
 nav = SHEET.worksheet("net asset values")
 
