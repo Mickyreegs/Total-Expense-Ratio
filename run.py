@@ -26,10 +26,12 @@ def get_date_range():
     to_date_str = input("To Date (dd/mm/yyyy): ")
     to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
 
-    print(f"From Date is {from_date_object}")
-    print(f"To Date is {to_date_object}")
+    return from_date_object, to_date_object
 
-get_date_range()
+
+from_date, to_date = get_date_range()
+print(f"From Date: {from_date}")
+print(f"To Date: {to_date}")
 
 nav = SHEET.worksheet("net asset values")
 
