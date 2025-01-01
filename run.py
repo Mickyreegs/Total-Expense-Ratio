@@ -12,8 +12,17 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ter_data')
 
-nav = SHEET.worksheet('net asset values')
+def get_average_nav():
+    """
+    Get the average net asset value within the date range specified by the user
+    """
+    print("Select date range for your TER:")
 
-data = nav.get_all_values()
+    from_date_str = input("From Date:")
+    to_date_str = input("To Date:")
+    print(f"From Date is {from_date_str}")
+    print(f"To Date is {to_date_str}")
 
-print(data)
+    
+
+get_average_nav()
