@@ -23,7 +23,7 @@ def get_date_range():
     The user submits dd/mm/yyyy and this is converted using datetime.
     Try/Except is used to ensure the user inputs a correct date in the expected format
     """
-    print("Select date range for your TER:\n")
+    print("Select date range for your TER:")
 
     while True:
         try:
@@ -40,8 +40,10 @@ def get_date_range():
 
 
 from_date, to_date = get_date_range()
-print(f"From Date: {from_date}")
-print(f"To Date: {to_date}\n")
+day_count = (to_date - from_date).days
+print(f"\nFrom Date: {from_date}")
+print(f"To Date: {to_date}")
+print(f"Day count for the period is {day_count}\n")
 
 
 
