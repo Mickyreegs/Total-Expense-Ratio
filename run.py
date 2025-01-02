@@ -69,7 +69,7 @@ filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
 #If filtered NAVs available, calculate the average NAV for that period
 if filtered_navs:
     average_nav = sum(filtered_navs) / len(filtered_navs)
-    print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav}")
+    print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}")
 else:
     print("No data available for that date range...")
 
