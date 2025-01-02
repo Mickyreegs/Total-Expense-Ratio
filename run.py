@@ -61,6 +61,7 @@ def filter_nav_by_date_range(data, from_date, to_date):
             filtered_navs.append(float(row[nav_index].replace(',', '')))
     return filtered_navs
 
+#Gets the NAVs available for that date range
 filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
 
 #If filtered NAVs available, calculate the average NAV for that period
