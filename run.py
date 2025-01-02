@@ -33,6 +33,10 @@ def get_date_range():
             to_date_str = input("To Date (dd/mm/yyyy): ")
             to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
 
+            if from_date_object >= to_date_object:
+                print("From Date must be less than To Date.")
+                continue
+
             return from_date_object, to_date_object
 
         except ValueError as e:
@@ -40,7 +44,7 @@ def get_date_range():
 
 
 from_date, to_date = get_date_range()
-day_count = (to_date - from_date).days
+day_count = (to_date - from_date).days+1
 print(f"\nFrom Date: {from_date}")
 print(f"To Date: {to_date}")
 print(f"Day count for the period is {day_count}\n")
@@ -72,10 +76,3 @@ if filtered_navs:
     print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}")
 else:
     print("No data available for that date range...")
-
-
-
-
-
-    
-
