@@ -14,9 +14,12 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ter_data')
 
+nav = SHEET.worksheet("net asset values")
+data = nav.get_all_values()
+
 def get_date_range():
     """
-    Get the date range specified by the user to build the report
+    
     """
     print("Select date range for your TER:\n")
 
@@ -38,22 +41,32 @@ from_date, to_date = get_date_range()
 print(f"From Date: {from_date}")
 print(f"To Date: {to_date}\n")
 
-nav = SHEET.worksheet("net asset values")
 
-def get_average_nav(nav):
+
+def filter_nav_by_date_range(data, from_date, to_date):
     """
-    Using the Net Asset Value column in the net asset values tab,
-    we iterate through the lists to extract all NAVs and get a single average figure
+
     """
-    data = nav.get_all_values()
     header = data[0]
+    date_index = header.index("Date")
     nav_index = header.index("Net Asset Value")
-    nav_values = [float(row[nav_index].replace(',', '')) for row in data[1:]]
-    average_nav = sum(nav_values) / len(nav_values)
-    return average_nav
 
-average_nav = get_average_nav(nav)
-print(f"The average NAV is: €{average_nav}")
+    filtered_navs = []
+    for row in data[1:]:
+        row_date = datetime.strptime(row[date_index], "%d/%m/%Y").date()
+        if from_date <= row_date <= to_date:
+            filtered_navs.append(float(row[nav_index].replace(',', '')))
+    return filtered_navs
+
+filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
+
+if filtered_navs:
+    average_nav = sum(filtered_navs) / len(filtered_navs)
+    print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav}")
+else:
+    print("No data available for that date range...")
+
+
 
 
 
