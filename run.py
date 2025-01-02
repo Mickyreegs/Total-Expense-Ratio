@@ -19,7 +19,9 @@ data = nav.get_all_values()
 
 def get_date_range():
     """
-    
+    Asks user to select a date range to run the Total Expense Ratio calculation.
+    The user submits dd/mm/yyyy and this is converted using datetime.
+    Try/Except is used to ensure the user inputs a correct date in the expected format
     """
     print("Select date range for your TER:\n")
 
@@ -45,7 +47,8 @@ print(f"To Date: {to_date}\n")
 
 def filter_nav_by_date_range(data, from_date, to_date):
     """
-
+    Filters the NAVs for the date range specified by the user.
+    The filtered NAVs can then be used to get the average NAV for that period
     """
     header = data[0]
     date_index = header.index("Date")
@@ -60,6 +63,7 @@ def filter_nav_by_date_range(data, from_date, to_date):
 
 filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
 
+#If filtered NAVs available, calculate the average NAV for that period
 if filtered_navs:
     average_nav = sum(filtered_navs) / len(filtered_navs)
     print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav}")
