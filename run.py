@@ -18,7 +18,7 @@ SHEET = GSPREAD_CLIENT.open('ter_data')
 nav = SHEET.worksheet("net asset values")
 data = nav.get_all_values()
 
-#Pull fixed expense values from column in Google Sheets
+#Pull fixed expense values from Google Sheets
 fixed = SHEET.worksheet("budget")
 f_data = fixed.get_all_values()
 
@@ -35,7 +35,7 @@ def get_date_range():
     The user submits dd/mm/yyyy and this is converted using datetime.
     Try/Except is used to ensure the user inputs a correct date in the expected format
     """
-    print("Select date range for your TER:")
+    print("Select date range within 2024 for your TER:\n")
 
     while True:
         try:
@@ -95,7 +95,6 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
     rows in the net asset values worksheet (minus 1 for the header)
     and finally multiplies the result by the day count
     """
-
     total_fixed = 0
     for fees in f_data[1:]:
         budget = int(fees[1])
@@ -104,14 +103,18 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
     return total_fixed
 
 total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
-print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}")
+print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
 
 
-#def calculate_variable_expenses_for_period():
-    #"""
-    #With the date range selected by the user, the variable expenses will be calculated
-    #for the period and used as part of the TER calculation
-    #"""
+def calculate_variable_expenses_for_period():
+    """
+    With the date range selected by the user, the variable expenses will be calculated
+    for the period and used as part of the TER calculation
+    """
+
+
+
+
 
 
 
