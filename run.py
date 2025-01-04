@@ -111,11 +111,13 @@ def calculate_variable_expenses_for_period():
 
 def main():
     """
-    
+    Calls all of the functions and returns the results.
     """
     from_date, to_date = get_date_range()
     day_count = (to_date - from_date).days+1
-    print(f"Day count for the period is {day_count}\n")
+    print(f"\nDay count for the period is {day_count}\n")
+
+    print("Fetching ANA....\n")
 
     #Gets the NAVs available for that date range
     filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
@@ -124,7 +126,9 @@ def main():
         average_nav = sum(filtered_navs) / len(filtered_navs)
         print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}\n")
     else:
-        print("No data available for that date range...")
+        print("No data available for that date range....")
+
+    print("Fetching total period expenses....\n")
 
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
     print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
