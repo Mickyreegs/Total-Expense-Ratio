@@ -29,10 +29,6 @@ v_data = fixed.get_all_values()
 #TER worksheet
 ter = SHEET.worksheet("TER")
 
-#Check user selected dates against available dates in the nav worksheet
-date_column = [row[0] for row in data]
-available_dates = {datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]}
-
 def get_date_range():
     """
     Asks user to select a date range to run the Total Expense Ratio calculation.
@@ -40,6 +36,10 @@ def get_date_range():
     Try/Except is used to ensure the user inputs a correct date in the expected format
     """
     print("Select date range within 2024 for your TER:\n")
+
+    #Check user selected dates against available dates in the nav worksheet
+    date_column = [row[0] for row in data]
+    available_dates = {datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]}
     
     while True:
         try:
@@ -122,13 +122,15 @@ def calculate_variable_expenses_for_period():
 
 
 
-
-
-
-
 #def calculate_total_expense_ratio():
     #"""
     #This is the final calculation.  TER ratio is (total expenses / average NAV)
     #"""
 
 
+
+def main():
+    """
+    
+    """
+    
