@@ -35,7 +35,7 @@ def get_date_range():
     The user submits dd/mm/yyyy and this is converted using datetime.
     Try/Except is used to ensure the user inputs a correct date in the expected format
     """
-    print("Select date range within 2024 for your TER:\n")
+
 
     #Check user selected dates against available dates in the nav worksheet
     date_column = [row[0] for row in data]
@@ -63,13 +63,6 @@ def get_date_range():
             print(f"Invalid date format: {e}.  Please enter the date as dd/mm/yyyy.")
 
 
-from_date, to_date = get_date_range()
-day_count = (to_date - from_date).days+1
-
-print(f"Day count for the period is {day_count}\n")
-
-
-
 def filter_nav_by_date_range(data, from_date, to_date):
     """
     Filters the NAVs for the date range specified by the user.
@@ -86,16 +79,6 @@ def filter_nav_by_date_range(data, from_date, to_date):
             filtered_navs.append(float(row[nav_index].replace(',', '')))
     return filtered_navs
 
-#Gets the NAVs available for that date range
-filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
-
-#If filtered NAVs available, calculate the average NAV for that period
-if filtered_navs:
-    average_nav = sum(filtered_navs) / len(filtered_navs)
-    print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}\n")
-else:
-    print("No data available for that date range...")
-
 
 def calculate_fixed_expenses_for_period(f_data, data, day_count):
     """
@@ -109,9 +92,6 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
         total_fixed += budget
     total_fixed = (total_fixed / (len(data)-1)) * day_count
     return total_fixed
-
-total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
-print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
 
 
 def calculate_variable_expenses_for_period():
@@ -133,4 +113,27 @@ def main():
     """
     
     """
+    from_date, to_date = get_date_range()
+    day_count = (to_date - from_date).days+1
+    print(f"Day count for the period is {day_count}\n")
+
+    #Gets the NAVs available for that date range
+    filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
+    #If filtered NAVs available, calculate the average NAV for that period
+    if filtered_navs:
+        average_nav = sum(filtered_navs) / len(filtered_navs)
+        print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}\n")
+    else:
+        print("No data available for that date range...")
+
+    total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
+    print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
+
+
+print("Select date range within 2024 for your TER:\n")
+main()
+
+    
+
+
     
