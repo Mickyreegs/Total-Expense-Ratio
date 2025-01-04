@@ -29,6 +29,10 @@ v_data = fixed.get_all_values()
 #TER worksheet
 ter = SHEET.worksheet("TER")
 
+#Check user selected dates against available dates in the nav worksheet
+date_column = [row[0] for row in data]
+available_dates = {datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]}
+
 def get_date_range():
     """
     Asks user to select a date range to run the Total Expense Ratio calculation.
@@ -36,7 +40,7 @@ def get_date_range():
     Try/Except is used to ensure the user inputs a correct date in the expected format
     """
     print("Select date range within 2024 for your TER:\n")
-
+    
     while True:
         try:
             from_date_str = input("From Date (dd/mm/yyyy): ")
@@ -47,6 +51,10 @@ def get_date_range():
 
             if from_date_object >= to_date_object:
                 print("From Date must be less than To Date.  Please select valid dates")
+                continue
+
+            if from_date_object not in available_dates or to_date_object not in available_dates:
+                print("One or both dates not found in data.  Please select dates within 2024")
                 continue
 
             return from_date_object, to_date_object
