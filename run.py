@@ -24,7 +24,7 @@ f_data = fixed.get_all_values()
 
 #Pull variable expense rate data from Google Sheets
 variable = SHEET.worksheet("prospectus rates")
-v_data = variable.col_values(2)
+v_data = fixed.get_all_values()
 
 #TER worksheet
 ter = SHEET.worksheet("TER")
@@ -90,6 +90,12 @@ else:
 
 
 def calculate_fixed_expenses_for_period(f_data, data, day_count):
+    """
+    Sums all the fixed expenses on the worksheet, then divides that amount by the total
+    rows in the net asset values worksheet (minus 1 for the header)
+    and finally multiplies the result by the day count
+    """
+
     total_fixed = 0
     for fees in f_data[1:]:
         budget = int(fees[1])
