@@ -94,31 +94,30 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
     return total_fixed
 
 
-def calculate_variable_expenses_for_period(v_data, data, day_count):
+def calculate_total_variable_fees(v_data, data, day_count, average_nav):
     """
     With the date range selected by the user, the variable expenses will be calculated
     for the period and used as part of the TER calculation
     """
     header = v_data[0]
+    expense_index = header.index("Expense Type")
     rate_index = header.index("Rate")
 
     variable_rates = []
     for row in v_data[1:]:
+        expense = row[expense_index]
         rate = row[rate_index]
         if isinstance(rate, str) and '%' in rate:
             rate = float(rate.strip('%')) / 100  #strips the % sign and converts to float
         else:
             rate = float(rate)
         variable_rates.append(round(rate,4))
-    return variable_rates
 
+    total_variable = 0
+    for rate in variable_rates:
+        total_variable += ((average_nav * rate) / len(data)-1) * day_count
 
-
-#def calculate_total_expense_ratio():
-    #"""
-    #This is the final calculation.  TER ratio is (total expenses / average NAV)
-    #"""
-
+    return variable_rates, total_variable
 
 
 def main():
@@ -145,8 +144,14 @@ def main():
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
     print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
 
-    variable_fees = calculate_variable_expenses_for_period(v_data, data, day_count)
-    print(variable_fees)
+    variable_rates, total_variable_expenses = calculate_total_variable_fees(v_data, data, day_count, average_nav)
+    print(f"Total variable expenses for the period were €{total_variable_expenses: ,.2f}\n")
+
+    total_expenses = total_fixed_expenses + total_variable_expenses
+    print(f"Total expenses for the period were €{total_expenses: ,.2f}\n")
+
+    ter = (total_expenses / average_nav) * 100
+    print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
 
 
 print("Select date range within 2024 for your TER:\n")
