@@ -128,8 +128,6 @@ def main():
     day_count = (to_date - from_date).days+1
     print(f"\nDay count for the period is {day_count}\n")
 
-    print("Fetching ANA....\n")
-
     #Gets the NAVs available for that date range
     filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
     #If filtered NAVs available, calculate the average NAV for that period
@@ -137,9 +135,8 @@ def main():
         average_nav = sum(filtered_navs) / len(filtered_navs)
         print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}\n")
     else:
-        print("No data available for that date range....")
+        print("No data available for that date range....\n")
 
-    print("Fetching total period expenses....\n")
 
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
     print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
@@ -153,7 +150,7 @@ def main():
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
 
-
+print("Launching TER program....\n")
 print("Select date range within 2024 for your TER:\n")
 main()
 
