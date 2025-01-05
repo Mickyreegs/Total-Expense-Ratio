@@ -115,7 +115,7 @@ def calculate_total_variable_fees(v_data, data, day_count, average_nav):
 
     total_variable = 0
     for rate in variable_rates:
-        total_variable += ((average_nav * rate) / len(data)-1) * day_count
+        total_variable += (average_nav * rate * day_count) / (len(data)-1)
 
     return variable_rates, total_variable
 
