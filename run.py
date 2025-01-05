@@ -24,7 +24,7 @@ f_data = fixed.get_all_values()
 
 #Pull variable expense rate data from Google Sheets
 variable = SHEET.worksheet("prospectus rates")
-v_data = fixed.get_all_values()
+v_data = variable.get_all_values()
 
 #TER worksheet
 ter = SHEET.worksheet("TER")
@@ -94,11 +94,23 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
     return total_fixed
 
 
-def calculate_variable_expenses_for_period():
+def calculate_variable_expenses_for_period(v_data, data, day_count):
     """
     With the date range selected by the user, the variable expenses will be calculated
     for the period and used as part of the TER calculation
     """
+    header = v_data[0]
+    rate_index = header.index("Rate")
+
+    variable_rates = []
+    for row in v_data[1:]:
+        rate = row[rate_index]
+        if isinstance(rate, str) and '%' in rate:
+            rate = float(rate.strip('%')) / 100  #strips the % sign and converts to float
+        else:
+            rate = float(rate)
+        variable_rates.append(round(rate,4))
+    return variable_rates
 
 
 
@@ -132,6 +144,9 @@ def main():
 
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
     print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
+
+    variable_fees = calculate_variable_expenses_for_period(v_data, data, day_count)
+    print(variable_fees)
 
 
 print("Select date range within 2024 for your TER:\n")
