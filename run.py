@@ -1,6 +1,5 @@
 import gspread
 from google.oauth2.service_account import Credentials
-import statistics
 from datetime import datetime
 
 SCOPE = [
@@ -43,10 +42,10 @@ def get_date_range():
     
     while True:
         try:
-            from_date_str = input("From Date (dd/mm/yyyy): ")
+            from_date_str = input("From Date (dd/mm/yyyy): \n")
             from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
 
-            to_date_str = input("To Date (dd/mm/yyyy): ")
+            to_date_str = input("To Date (dd/mm/yyyy): \n")
             to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
 
             if from_date_object >= to_date_object:
