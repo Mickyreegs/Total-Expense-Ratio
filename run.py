@@ -138,10 +138,10 @@ def main():
 
 
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
-    print(f"Total fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
+    print(f"Fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
 
     variable_rates, total_variable_expenses = calculate_total_variable_fees(v_data, data, day_count, average_nav)
-    print(f"Total variable expenses for the period were €{total_variable_expenses: ,.2f}\n")
+    print(f"Variable expenses for the period were €{total_variable_expenses: ,.2f}\n")
 
     total_expenses = total_fixed_expenses + total_variable_expenses
     print(f"Total expenses for the period were €{total_expenses: ,.2f}\n")
