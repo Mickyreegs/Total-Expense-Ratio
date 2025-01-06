@@ -43,16 +43,16 @@ def get_date_range():
     while True:
         try:
             from_date_str = input("From Date (dd/mm/yyyy): \n")
-            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
+            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date() #change string to date format
 
             to_date_str = input("To Date (dd/mm/yyyy): \n")
-            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
+            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date() #change string to date format
 
-            if from_date_object >= to_date_object:
+            if from_date_object >= to_date_object: #from date must be less than to date
                 print("From Date must be less than To Date.  Please select valid dates")
                 continue
 
-            if from_date_object not in available_dates or to_date_object not in available_dates:
+            if from_date_object not in available_dates or to_date_object not in available_dates: #verifies user entry against available data
                 print("One or both dates not found in data.  Please select dates within 2024")
                 continue
 
@@ -72,10 +72,10 @@ def filter_nav_by_date_range(data, from_date, to_date):
     nav_index = header.index("Net Asset Value")
 
     filtered_navs = []
-    for row in data[1:]:
-        row_date = datetime.strptime(row[date_index], "%d/%m/%Y").date()
-        if from_date <= row_date <= to_date:
-            filtered_navs.append(float(row[nav_index].replace(',', '')))
+    for row in data[1:]: #skips top row of data list in for loop
+        row_date = datetime.strptime(row[date_index], "%d/%m/%Y").date() #converts data to date format
+        if from_date <= row_date <= to_date: #filters for specified dates
+            filtered_navs.append(float(row[nav_index].replace(',', ''))) #appends NAV in float format
     return filtered_navs
 
 
@@ -86,10 +86,10 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
     and finally multiplies the result by the day count
     """
     total_fixed = 0
-    for fees in f_data[1:]:
-        budget = int(fees[1])
-        total_fixed += budget
-    total_fixed = (total_fixed / (len(data)-1)) * day_count
+    for fees in f_data[1:]: #skips top row of data list in for loop
+        budget = int(fees[1]) #takes the values at index 1 on the 'budget' worksheet and converts to integers
+        total_fixed += budget #sums the budget amounts
+    total_fixed = (total_fixed / (len(data)-1)) * day_count #Takes the total_fixed, divides by length of 'data' (366days), and multiplies by user range (day count)
     return total_fixed
 
 
@@ -103,18 +103,18 @@ def calculate_total_variable_fees(v_data, data, day_count, average_nav):
     rate_index = header.index("Rate")
 
     variable_rates = []
-    for row in v_data[1:]:
+    for row in v_data[1:]:#skips top row of data list in for loop
         expense = row[expense_index]
         rate = row[rate_index]
-        if isinstance(rate, str) and '%' in rate:
+        if isinstance(rate, str) and '%' in rate: #checks if rate is both a string and contains '%'
             rate = float(rate.strip('%')) / 100  #strips the % sign and converts to float
         else:
             rate = float(rate)
-        variable_rates.append(round(rate,4))
+        variable_rates.append(round(rate,4)) #append to 4 decimal places
 
     total_variable = 0
     for rate in variable_rates:
-        total_variable += (average_nav * rate * day_count) / (len(data)-1)
+        total_variable += (average_nav * rate * day_count) / (len(data)-1) #Gets the sum of the variable rates by multiplying average NAV by rate by day count and dividing by 366
 
     return variable_rates, total_variable
 
@@ -136,16 +136,19 @@ def main():
     else:
         print("No data available for that date range....\n")
 
-
+    #calculates fixed expenses for the period defined by user
     total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
     print(f"Fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
 
+    #calculates variable expenses for the period defined by user
     variable_rates, total_variable_expenses = calculate_total_variable_fees(v_data, data, day_count, average_nav)
     print(f"Variable expenses for the period were €{total_variable_expenses: ,.2f}\n")
 
+    #calculates total expenses for the period defined by user
     total_expenses = total_fixed_expenses + total_variable_expenses
     print(f"Total expenses for the period were €{total_expenses: ,.2f}\n")
 
+    #calculates total expense ratio (TER)
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
 
