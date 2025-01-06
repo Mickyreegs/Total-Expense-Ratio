@@ -95,8 +95,9 @@ def calculate_fixed_expenses_for_period(f_data, data, day_count):
 
 def calculate_total_variable_fees(v_data, data, day_count, average_nav):
     """
-    With the date range selected by the user, the variable expenses will be calculated
-    for the period and used as part of the TER calculation
+    With the date range selected by the user, 
+    the variable expenses (rate*average NAV*day count)/366
+    will be calculated for the period and used as part of the TER calculation 
     """
     header = v_data[0]
     expense_index = header.index("Expense Type")
