@@ -25,8 +25,16 @@ f_data = fixed.get_all_values()
 variable = SHEET.worksheet("prospectus rates")
 v_data = variable.get_all_values()
 
-#TER worksheet
-ter = SHEET.worksheet("TER")
+def get_fund_info():
+    """
+    Pulls fund name and fund number from the list of data
+    """
+    for num in data[1:]: #skips top row of data list in for loop
+        fund_num = num[1] #takes the values at index 1 
+    for name in data[1:]: #skips top row of data list in for loop
+        fund_name = name[2] #takes the values at index 2
+    
+    return fund_num, fund_name
 
 def get_date_range():
     """
@@ -120,6 +128,10 @@ def calculate_total_variable_fees(v_data, data, day_count, average_nav):
     return variable_rates, total_variable
 
 
+
+
+
+
 def main():
     """
     Calls all of the functions and returns the results.
@@ -127,6 +139,10 @@ def main():
     from_date, to_date = get_date_range()
     day_count = (to_date - from_date).days+1
     print(f"\nDay count for the period is {day_count}\n")
+
+    fund_number, fund_name = get_fund_info()
+    print(f"Fund number: {fund_number}\n")
+    print(f"Fund name: {fund_name}\n")
 
     #Gets the NAVs available for that date range
     filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
@@ -152,6 +168,9 @@ def main():
     #calculates total expense ratio (TER)
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
+
+    ter = SHEET.worksheet("TER") #TER worksheet
+   
 
 print("Launching TER program....\n")
 print("Select date range within 2024 for your TER:\n")
