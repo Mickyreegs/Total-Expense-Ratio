@@ -25,16 +25,18 @@ f_data = fixed.get_all_values()
 variable = SHEET.worksheet("prospectus rates")
 v_data = variable.get_all_values()
 
-def get_fund_info():
+def get_fund_info(data):
     """
     Pulls fund name and fund number from the list of data
     """
-    for num in data[1:]: #skips top row of data list in for loop
-        fund_num = num[1] #takes the values at index 1 
-    for name in data[1:]: #skips top row of data list in for loop
-        fund_name = name[2] #takes the values at index 2
+    fund_number = None
+    fund_name = None
+
+    for row in data[1:]: #skips top row of data list in for loop
+        fund_number = row[1] #takes the values in the second column
+        fund_name = row[2] #takes the values in the 3rd column
     
-    return fund_num, fund_name
+    return fund_number, fund_name
 
 def get_date_range():
     """
@@ -64,7 +66,7 @@ def get_date_range():
                 print("One or both dates not found in data.  Please select dates within 2024")
                 continue
 
-            return from_date_object, to_date_object
+            return from_date_object, to_date_object, from_date_str, to_date_str
 
         except ValueError as e:
             print(f"Invalid date format: {e}.  Please enter the date as dd/mm/yyyy.")
@@ -128,19 +130,44 @@ def calculate_total_variable_fees(v_data, data, day_count, average_nav):
     return variable_rates, total_variable
 
 
+def format_number(number):
+    """
+    Amend number format for use in TER worksheet
+    """
+    return "{:,.2f}".format(number)
 
 
+def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter):
+    """
+    Inserts all function results to the TER worksheet in the expected formats
+    """
+    average_nav_format = format_number(average_nav)
+    total_fixed_expenses_format = format_number(total_fixed_expenses)
+    total_variable_expenses_format = format_number(total_variable_expenses)
 
+    ter_row = [
+        fund_number,
+        fund_name,
+        from_date_str,
+        to_date_str,
+        day_count,
+        average_nav_format,
+        total_fixed_expenses_format,
+        total_variable_expenses_format,
+        ter
+    ]
+
+    ter_sheet.insert_row(ter_row, 2)
 
 def main():
     """
     Calls all of the functions and returns the results.
     """
-    from_date, to_date = get_date_range()
+    from_date, to_date, from_date_str, to_date_str = get_date_range()
     day_count = (to_date - from_date).days+1
     print(f"\nDay count for the period is {day_count}\n")
 
-    fund_number, fund_name = get_fund_info()
+    fund_number, fund_name = get_fund_info(data)
     print(f"Fund number: {fund_number}\n")
     print(f"Fund name: {fund_name}\n")
 
@@ -169,8 +196,11 @@ def main():
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
 
-    ter = SHEET.worksheet("TER") #TER worksheet
-   
+    #pushes results to the TER worksheet
+    ter_sheet = SHEET.worksheet("TER") #TER worksheet
+    insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter)
+    
+    
 
 print("Launching TER program....\n")
 print("Select date range within 2024 for your TER:\n")
