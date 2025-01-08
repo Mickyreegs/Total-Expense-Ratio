@@ -136,6 +136,9 @@ def format_number(number):
     """
     return "{:,.2f}".format(number)
 
+def format_percent(number):
+    return "{:.4f}%".format(number)
+
 
 def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter):
     """
@@ -144,6 +147,7 @@ def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str
     average_nav_format = format_number(average_nav)
     total_fixed_expenses_format = format_number(total_fixed_expenses)
     total_variable_expenses_format = format_number(total_variable_expenses)
+    ter_format = format_percent(ter)
 
     ter_row = [
         fund_number,
@@ -154,7 +158,7 @@ def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str
         average_nav_format,
         total_fixed_expenses_format,
         total_variable_expenses_format,
-        ter
+        ter_format
     ]
 
     ter_sheet.insert_row(ter_row, 2)
@@ -194,7 +198,7 @@ def main():
 
     #calculates total expense ratio (TER)
     ter = (total_expenses / average_nav) * 100
-    print(f"Total Expense Ratio for the period was {ter: .2f}%\n")
+    print(f"Total Expense Ratio for the period was {ter: .4f}%\n")
 
     #pushes results to the TER worksheet
     ter_sheet = SHEET.worksheet("TER") #TER worksheet
