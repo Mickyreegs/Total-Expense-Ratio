@@ -140,7 +140,7 @@ def format_percent(number):
     return "{:.4f}%".format(number)
 
 
-def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter):
+def insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter):
     """
     Inserts all function results to the TER worksheet in the expected formats
     """
@@ -161,7 +161,8 @@ def insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str
         ter_format
     ]
 
-    ter_sheet.insert_row(ter_row, 2)
+    ter_sheet.update(range_name='A2:I2', values=[ter_row]) #overwrites row 2 on the TER worksheet
+    ter_history.insert_row(ter_row, 2) #appends the latest result to create a history of runs in run history worksheet
 
 def main():
     """
@@ -202,7 +203,8 @@ def main():
 
     #pushes results to the TER worksheet
     ter_sheet = SHEET.worksheet("TER") #TER worksheet
-    insert_results(ter_sheet, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter)
+    ter_history = SHEET.worksheet("run history") #TER History worksheet
+    insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter)
     
     
 
