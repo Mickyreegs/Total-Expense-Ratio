@@ -162,7 +162,7 @@ def insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str
     ]
 
     ter_sheet.update(range_name='A2:I2', values=[ter_row]) #overwrites row 2 on the TER worksheet
-    ter_history.insert_row(ter_row, 2) #appends the latest result to create a history of runs in run history worksheet
+    ter_history.append_row(ter_row) #appends the latest result to create a history of runs in run history worksheet
 
 def main():
     """
