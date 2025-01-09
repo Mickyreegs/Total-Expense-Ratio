@@ -235,7 +235,7 @@ def main():
     else:
         print("No data available for that date range....\n")
 
-    "calculates fixed expenses for the period defined by user"
+    "Calculates fixed expenses for the period defined by user"
     total_fixed_expenses = calculate_fixed_expenses_for_period(
         f_data,
         data,
@@ -246,7 +246,7 @@ def main():
         f"Fixed fees for the period were €{total_fixed_expenses: ,.2f}\n"
     )
 
-    "calculates variable expenses for the period defined by user"
+    "Calculates variable expenses for the period defined by user"
     variable_rates, total_variable_expenses = calculate_total_variable_fees(
         v_data,
         data,
@@ -258,15 +258,15 @@ def main():
         f"Variable fees for the period were €{total_variable_expenses: ,.2f}\n"
     )
 
-    "calculates total expenses for the period defined by user"
+    "Calculates total expenses for the period defined by user"
     total_expenses = total_fixed_expenses + total_variable_expenses
     print(f"Total fees for the period were €{total_expenses: ,.2f}\n")
 
-    "calculates total expense ratio (TER)"
+    "Calculates total expense ratio (TER)"
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period is{ter: .4f}%\n")
 
-    "pushes results to the TER worksheet"
+    "Pushes results to the TER worksheet"
     ter_sheet = SHEET.worksheet("TER")  # TER worksheet
     ter_history = SHEET.worksheet("run history")  # TER History worksheet
     insert_results(
