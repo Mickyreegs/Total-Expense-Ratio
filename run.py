@@ -17,12 +17,13 @@ nav = SHEET.worksheet("net asset values")  # pull NAV data from Google Sheets
 data = nav.get_all_values()
 
 
-fixed = SHEET.worksheet("budget")  # Pull fixed expense values from Google Sheets
+fixed = SHEET.worksheet("budget")  # Pull fixed expense values
 f_data = fixed.get_all_values()
 
 
-variable = SHEET.worksheet("prospectus rates")  # Pull variable expense rate data from Google Sheets
+variable = SHEET.worksheet("prospectus rates")  # Pull variable rate data
 v_data = variable.get_all_values()
+
 
 def get_fund_info(data):
     """
@@ -34,44 +35,56 @@ def get_fund_info(data):
     for row in data[1:]:  # skips top row of data list in for loop
         fund_number = row[1]  # takes the values in the second column
         fund_name = row[2]  # takes the values in the 3rd column
-    
+
     return fund_number, fund_name
+
 
 def get_date_range():
     """
-    Asks user to select a date range to run the Total Expense Ratio calculation.
+    Asks user to select a date range to run the TER calculation.
     The user submits dd/mm/yyyy and this is converted using datetime.
-    Try/Except is used to ensure the user inputs a correct date in the expected format
+    Try/Except used to ensure the user inputs a correct date format
     """
-
 
     "Check user selected dates against available dates in the nav worksheet"
     date_column = [row[0] for row in data]
-    available_dates = {datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]}
-    
+    available_dates = {
+        datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]
+    }
+
     while True:
         try:
             from_date_str = input("From Date (dd/mm/yyyy): \n")
-            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()  # change string to date format
+
+            "Change string to date format"
+            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
 
             to_date_str = input("To Date (dd/mm/yyyy): \n")
-            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()  # change string to date format
 
-            if from_date_object >= to_date_object:  # from date must be less than to date
-                print("From Date must be less than To Date.  Please select valid dates")
+            "Change string to date format"
+            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
+
+            "From date must be less than to date"
+            if from_date_object >= to_date_object:
+                print("From Date must be less than To Date...")
                 continue
 
-            if from_date_object not in available_dates or to_date_object not in available_dates: # verifies user entry against available data
-                print("One or both dates not found in data.  Please select dates within 2024")
+            "Verifies user entry against available data"
+            if from_date_object not in available_dates or to_date_object not in available_dates:
+                print("One or both dates not found.  Select 2024 dates")
                 continue
 
             return from_date_object, to_date_object, from_date_str, to_date_str
 
         except ValueError as e:
-            print(f"Invalid date format: {e}.  Please enter the date as dd/mm/yyyy.")
+            print(f"Invalid date format: {e}.  Format should be dd/mm/yyyy.")
 
 
-def filter_nav_by_date_range(data, from_date, to_date):
+def filter_nav_by_date_range(
+    data,
+    from_date,
+    to_date
+):
     """
     Filters the NAVs for the date range specified by the user.
     The filtered NAVs can then be used to get the average NAV for that period
@@ -81,50 +94,60 @@ def filter_nav_by_date_range(data, from_date, to_date):
     nav_index = header.index("Net Asset Value")
 
     filtered_navs = []
-    for row in data[1:]:  # skips top row of data list in for loop
-        row_date = datetime.strptime(row[date_index], "%d/%m/%Y").date()  # converts data to date format
-        if from_date <= row_date <= to_date:  # filters for specified dates
-            filtered_navs.append(float(row[nav_index].replace(',', '')))  # appends NAV in float format
+    for row in data[1:]:
+        row_date = datetime.strptime(row[date_index], "%d/%m/%Y").date()
+        if from_date <= row_date <= to_date:
+            filtered_navs.append(float(row[nav_index].replace(',', '')))
     return filtered_navs
 
 
-def calculate_fixed_expenses_for_period(f_data, data, day_count):
+def calculate_fixed_expenses_for_period(
+    f_data,
+    data,
+    day_count
+):
     """
-    Sums all the fixed expenses on the worksheet, then divides that amount by the total
-    rows in the net asset values worksheet (minus 1 for the header)
+    Sums the fixed expenses on the worksheet, divides that amount by the total
+    rows in the net asset values worksheet (minus 1 for the header),
     and finally multiplies the result by the day count
     """
     total_fixed = 0
-    for fees in f_data[1:]:  # skips top row of data list in for loop
-        budget = int(fees[1])  # takes the values at index 1 on the 'budget' worksheet and converts to integers
-        total_fixed += budget  # sums the budget amounts
-    total_fixed = (total_fixed / (len(data)-1)) * day_count  # Takes the total_fixed, divides by length of 'data' (366days), and multiplies by user range (day count)
+    for fees in f_data[1:]:
+        budget = int(fees[1])
+        total_fixed += budget
+    total_fixed = (total_fixed / (len(data)-1)) * day_count
     return total_fixed
 
 
-def calculate_total_variable_fees(v_data, data, day_count, average_nav):
+def calculate_total_variable_fees(
+    v_data,
+    data,
+    day_count,
+    average_nav
+):
     """
-    With the date range selected by the user, 
+    With the date range selected by the user,
     the variable expenses (rate*average NAV*day count)/366
-    will be calculated for the period and used as part of the TER calculation 
+    will be calculated for the period and used as part of the TER calculation
     """
     header = v_data[0]
     expense_index = header.index("Expense Type")
     rate_index = header.index("Rate")
 
     variable_rates = []
-    for row in v_data[1:]:  # skips top row of data list in for loop
+    for row in v_data[1:]:
         expense = row[expense_index]
         rate = row[rate_index]
-        if isinstance(rate, str) and '%' in rate:  # checks if rate is both a string and contains '%'
-            rate = float(rate.strip('%')) / 100  # strips the % sign and converts to float
+        if isinstance(rate, str) and '%' in rate:  # check rate is string & '%'
+            rate = float(rate.strip('%')) / 100  # strips %, converts to float
         else:
             rate = float(rate)
-        variable_rates.append(round(rate,4))  # append to 4 decimal places
+        variable_rates.append(round(rate, 4))  # append to 4 decimal places
 
+    "Multiplies sum of var rates (average NAV * rate * day count / 366)"
     total_variable = 0
     for rate in variable_rates:
-        total_variable += (average_nav * rate * day_count) / (len(data)-1)  # Gets the sum of the variable rates by multiplying average NAV by rate by day count and dividing by 366
+        total_variable += (average_nav * rate * day_count) / (len(data)-1)
 
     return variable_rates, total_variable
 
@@ -140,7 +163,19 @@ def format_percent(number):
     return "{:.4f}%".format(number)  # returns number to 4 decimals with '%'
 
 
-def insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter):
+def insert_results(
+    ter_sheet,
+    ter_history,
+    fund_number,
+    fund_name,
+    from_date_str,
+    to_date_str,
+    day_count,
+    average_nav,
+    total_fixed_expenses,
+    total_variable_expenses,
+    ter
+):
     """
     Inserts all function results to the TER worksheet in the expected formats
     """
@@ -161,8 +196,10 @@ def insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str
         ter_format
     ]
 
-    ter_sheet.update(range_name='A2:I2', values=[ter_row])  # overwrites row 2 on the TER worksheet
-    ter_history.append_row(ter_row)  # appends the latest result to create a history of runs in run history worksheet
+    "Overwrites row 2 on the TER worksheet"
+    ter_sheet.update(range_name='A2:I2', values=[ter_row])
+    "Append latest result to create history of runs in run history worksheet"
+    ter_history.append_row(ter_row)
 
 
 def main():
@@ -179,33 +216,63 @@ def main():
 
     "Gets the NAVs available for that date range"
     filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
-    "If filtered NAVs available, calculate the average NAV for that period"
+
+    "If filtered NAVs available, calculate average NAV (ANA) for that period"
     if filtered_navs:
         average_nav = sum(filtered_navs) / len(filtered_navs)
-        print(f"Average Net Assets for the period {from_date} to {to_date} is €{average_nav:,.2f}\n")
+        print(
+            f"ANA from {from_date} to {to_date} is €{average_nav:,.2f}\n"
+        )
     else:
         print("No data available for that date range....\n")
 
     "calculates fixed expenses for the period defined by user"
-    total_fixed_expenses = calculate_fixed_expenses_for_period(f_data, data, day_count)
-    print(f"Fixed expenses for the period were €{total_fixed_expenses: ,.2f}\n")
+    total_fixed_expenses = calculate_fixed_expenses_for_period(
+        f_data,
+        data,
+        day_count
+    )
+
+    print(
+        f"Fixed fees for the period were €{total_fixed_expenses: ,.2f}\n"
+    )
 
     "calculates variable expenses for the period defined by user"
-    variable_rates, total_variable_expenses = calculate_total_variable_fees(v_data, data, day_count, average_nav)
-    print(f"Variable expenses for the period were €{total_variable_expenses: ,.2f}\n")
+    variable_rates, total_variable_expenses = calculate_total_variable_fees(
+        v_data,
+        data,
+        day_count,
+        average_nav
+    )
+
+    print(
+        f"Variable fees for the period were €{total_variable_expenses: ,.2f}\n"
+    )
 
     "calculates total expenses for the period defined by user"
     total_expenses = total_fixed_expenses + total_variable_expenses
-    print(f"Total expenses for the period were €{total_expenses: ,.2f}\n")
+    print(f"Total fees for the period were €{total_expenses: ,.2f}\n")
 
     "calculates total expense ratio (TER)"
     ter = (total_expenses / average_nav) * 100
-    print(f"Total Expense Ratio for the period was {ter: .4f}%\n")
+    print(f"Total Expense Ratio for the period is{ter: .4f}%\n")
 
     "pushes results to the TER worksheet"
     ter_sheet = SHEET.worksheet("TER")  # TER worksheet
     ter_history = SHEET.worksheet("run history")  # TER History worksheet
-    insert_results(ter_sheet, ter_history, fund_number, fund_name, from_date_str, to_date_str, day_count, average_nav, total_fixed_expenses, total_variable_expenses, ter)
+    insert_results(
+        ter_sheet,
+        ter_history,
+        fund_number,
+        fund_name,
+        from_date_str,
+        to_date_str,
+        day_count,
+        average_nav,
+        total_fixed_expenses,
+        total_variable_expenses,
+        ter
+    )
 
 
 print("Launching TER program....\n")
