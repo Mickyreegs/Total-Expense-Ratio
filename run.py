@@ -57,12 +57,18 @@ def get_date_range():
             from_date_str = input("From Date (dd/mm/yyyy): \n")
 
             "Change string to date format"
-            from_date_object = datetime.strptime(from_date_str, '%d/%m/%Y').date()
+            from_date_object = datetime.strptime(
+                from_date_str,
+                '%d/%m/%Y'
+            ).date()
 
             to_date_str = input("To Date (dd/mm/yyyy): \n")
 
             "Change string to date format"
-            to_date_object = datetime.strptime(to_date_str, '%d/%m/%Y').date()
+            to_date_object = datetime.strptime(
+                to_date_str,
+                '%d/%m/%Y'
+            ).date()
 
             "From date must be less than to date"
             if from_date_object >= to_date_object:
@@ -70,7 +76,10 @@ def get_date_range():
                 continue
 
             "Verifies user entry against available data"
-            if from_date_object not in available_dates or to_date_object not in available_dates:
+            if (
+                from_date_object not in available_dates
+                or to_date_object not in available_dates
+            ):
                 print("One or both dates not found.  Select 2024 dates")
                 continue
 
