@@ -27,29 +27,78 @@ Users must select a date range within 2024 and a TER is calculated for that date
 ## Features
 
 #### Input validation and error checking
+<ul>
+    <li>Dates must be in dd/mm/yyyy format
+    <li>From Date cannot be greater than To Date
+    <li>Dates selected must be within the data set provided (2024)
+</ul>
+
+![Error 3](readme/Error%203.JPG)
+
+![Error 2](readme/Error%202.JPG)
+
+![Error1](readme/Error%201.JPG)
 
 #### Fixed expenses calculation based on budget data provided
+![Fixed Expense Budget](readme/Fixed%20Budget.JPG)
 
 #### Variable expenses calculation based on the prospectus rates provided
+![Variable Expense Rates](readme/Variable%20Rates.JPG)
 
 #### Total period expense calculation
 
 #### Day count based on user date selection
+![Day Count](readme/Day%20Count.JPG)
 
 #### Worksheet updates
+![TER Worksheet showing the update TER calculation and its inputs](readme/TER.JPG)
 
 #### Run History
+![TER history worksheet showing the historic TER calculation runs and their inputs](readme/Run%20History.JPG)
 
 ## Data Model
+The data model is reflects the structure of the Total Expense Ratio (TER) calculations, detailing the basic fund info,
+time period, average NAV, expenses and the calculated TER.  The model uses and stores the data within the worksheets.
+
+#### Data calculated in Terminal
+![Data returned from Terminal](readme/Returned%20Data%202.JPG)
+
+#### Calculated data pushed to TER worksheet
+![TER Worksheet showing the update TER calculation and its inputs](readme/TER.JPG)
+
+#### History of calculated data stored in run history worksheet
+![TER history worksheet showing the historic TER calculation runs and their inputs](readme/Run%20History.JPG)
 
 ## Testing
 
 ### Bugs
+Squashed bugs were:
+<ul>
+    <li>Datetime format - 
+    <li>
+    <li>
+    <li>
+    <li>
+</ul>
 
 ### Remaining Bugs
+No bugs remain
 
 ### Validator Testing
+No errors were returned from the Code Institute's Python Linter [PEP8](https://pep8ci.herokuapp.com/)
+
+![PEP8 Linter results image](readme/PEP8.JPG)
 
 ## Deployment
+The project was deployed using Code Institute's mock terminal for Heroku.
+
+Steps for deployment were:
+<ul>
+    <li>Create a new Heroku app
+    <li>Set the buildbacks to Python and NodeJS in that order
+    <li>Additional step of adding PORT 8000 was implemented as per CI guidelines
+    <li>Link the Heroku app to the repository
+    <li>Click on Deploy
+</ul>
 
 ## Credits
