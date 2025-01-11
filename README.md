@@ -102,3 +102,13 @@ Steps for deployment were:
 </ul>
 
 ## Credits
+
+Code Institute - Python Essentials
+
+[Code Institute - Love Sandwiches - Essentials Project](https://github.com/Code-Institute-Solutions/love-sandwiches-p5-sourcecode/tree/master/05-deployment/01-deployment-part-1)
+
+[Stack Overflow - General Queries](https://stackoverflow.com/)
+
+[Python.org - Datetime](https://docs.python.org/3/library/datetime.html)
+
+[Python.org - Math](https://docs.python.org/3/library/math.html)
