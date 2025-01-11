@@ -25,10 +25,31 @@ Users must select a date range within 2024 and a TER is calculated for that date
 ![Flow Chart detailing the TER calculation process in the terminal](readme/Lucid%20Chart.png)
 
 ## Features
-<ul>
-    <li>Input validation and error checking
-    <li>Fixed expenses calculation based on budget data provided
-    <li>Variable expenses calculation based on the prospectus rates provided
-    <li>Total period expense calculation
-    <li>Day count based on user date selection
-</ul>
+
+#### Input validation and error checking
+
+#### Fixed expenses calculation based on budget data provided
+
+#### Variable expenses calculation based on the prospectus rates provided
+
+#### Total period expense calculation
+
+#### Day count based on user date selection
+
+#### Worksheet updates
+
+#### Run History
+
+## Data Model
+
+## Testing
+
+### Bugs
+
+### Remaining Bugs
+
+### Validator Testing
+
+## Deployment
+
+## Credits
