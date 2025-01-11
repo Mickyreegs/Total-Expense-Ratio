@@ -1,32 +1,23 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# TER-ribly Financial TER Program
 
 Welcome,
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **May 14, 2024**
+TER-ribly Financial is a Python terminal prgram, which runs in the Code Institute mock terminal on Heroku.
 
-## Reminders
+The live version was deployed to Heroku via GitHub and can be found here:
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+[TER-ribly Financial](https://ter-ribly-financial-ebc03ebd637e.herokuapp.com/)
 
-## Creating the Heroku app
+Users must select a date range within 2024 and a TER is calculated for that date range based on the following:
+<ul>
+    <li>Average NAV
+    <li>Fixed Expenses
+    <li>Variable Expenses
+    <li>Total Expenses
+    <li>Day Count
+</ul>
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+![AmIResponsive terminal image of TER-ribly Financial responsiveness](readme/Am%20I%20Responsive.JPG)
 
-1. `heroku/python`
-2. `heroku/nodejs`
+## How To Run
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
----
-
-Happy coding!
