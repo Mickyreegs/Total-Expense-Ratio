@@ -39,6 +39,9 @@ Users must select a date range within 2024 and a TER is calculated for that date
 
 ![Error1](readme/Error%201.JPG)
 
+#### Comprehensive data file with an entire year of NAVs to work from
+![Daily NAVs](readme/Daily%20NAVs.JPG)
+
 #### Fixed expenses calculation based on budget data provided
 ![Fixed Expense Budget](readme/Fixed%20Budget.JPG)
 
@@ -47,12 +50,6 @@ Users must select a date range within 2024 and a TER is calculated for that date
 
 #### Day count based on user date selection
 ![Day Count](readme/Day%20Count.JPG)
-
-#### Worksheet updates
-![TER Worksheet showing the update TER calculation and its inputs](readme/TER.JPG)
-
-#### Run History
-![TER history worksheet showing the historic TER calculation runs and their inputs](readme/Run%20History.JPG)
 
 ## Data Model
 The data model reflects the structure of the Total Expense Ratio (TER) calculations, detailing the basic fund info,
@@ -69,16 +66,67 @@ time period, average NAV, expenses and the calculated TER.  The model uses and s
 
 ## Testing
 
+### Functional Testing
+<table>
+    <tr>
+        <th>Action</th>
+        <th>Expected Behaviour</th>
+        <th>Pass/Fail</th>
+    </tr>
+    <tr>
+        <td>Input Validation</td>
+        <td>User cannot proceed unless the correct dates and format are used</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Day Count Calculation</td>
+        <td>The correct number of days is calculated based on user inputs</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Average NAV calculation</td>
+        <td>Calculates correct average NAV for date range specified by user</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Fixed Expense Calculation</td>
+        <td>Calculates correct fixed expenses for date range using the budget provided in worksheets</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Variable Expense Calculation</td>
+        <td>Calculates correct variable expenses for date range using the rates provided in worksheets</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Total Expense Calculation</td>
+        <td>Calculates total expenses by adding fixed and variable</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>TER Calculation</td>
+        <td>The correct TER is calculated using Total Expenses / Average NAV</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>TER Worksheet Update</td>
+        <td>The data is pushed to the TER worksheet and overwrites for every run</td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>TER Run History Worksheet Update</td>
+        <td>The data is appended to the run history worksheet and stores all historical TER calculations</td>
+        <td>Pass</td>
+    </tr>
+</table>
+
 ### Bugs
 Squashed bugs were:
 <ul>
-    <li>Datetime format - Converting data from string to date, and in dd/mm/yyyy, proved tough to begin with,
+    <li>Datetime format - Converting data from string to date, and in dd/mm/yyyy format, proved tough to begin with,
         but this was corrected after reviewing the course materials and the Python.org materials
     <li>Variable Expenses - The calculation was incorrect at the beginning due to the incorrect use of parentheses. 
-        The final formula is total_variable += (average_nav * rate * day_count) / (len(data)-1)
-    <li>
-    <li>
-    <li>
+        The final formula is <strong>total_variable += (average_nav * rate * day_count) / (len(data)-1)</strong>
 </ul>
 
 ### Remaining Bugs
