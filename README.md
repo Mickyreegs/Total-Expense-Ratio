@@ -45,8 +45,6 @@ Users must select a date range within 2024 and a TER is calculated for that date
 #### Variable expenses calculation based on the prospectus rates provided
 ![Variable Expense Rates](readme/Variable%20Rates.JPG)
 
-#### Total period expense calculation
-
 #### Day count based on user date selection
 ![Day Count](readme/Day%20Count.JPG)
 
@@ -57,7 +55,7 @@ Users must select a date range within 2024 and a TER is calculated for that date
 ![TER history worksheet showing the historic TER calculation runs and their inputs](readme/Run%20History.JPG)
 
 ## Data Model
-The data model is reflects the structure of the Total Expense Ratio (TER) calculations, detailing the basic fund info,
+The data model reflects the structure of the Total Expense Ratio (TER) calculations, detailing the basic fund info,
 time period, average NAV, expenses and the calculated TER.  The model uses and stores the data within the worksheets.
 
 #### Data calculated in Terminal
@@ -74,8 +72,10 @@ time period, average NAV, expenses and the calculated TER.  The model uses and s
 ### Bugs
 Squashed bugs were:
 <ul>
-    <li>Datetime format - 
-    <li>
+    <li>Datetime format - Converting data from string to date, and in dd/mm/yyyy, proved tough to begin with,
+        but this was corrected after reviewing the course materials and the Python.org materials
+    <li>Variable Expenses - The calculation was incorrect at the beginning due to the incorrect use of parentheses. 
+        The final formula is total_variable += (average_nav * rate * day_count) / (len(data)-1)
     <li>
     <li>
     <li>

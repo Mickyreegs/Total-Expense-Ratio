@@ -46,7 +46,7 @@ def get_date_range():
     Try/Except used to ensure the user inputs a correct date format
     """
 
-    "Check user selected dates against available dates in the nav worksheet"
+    # Check user dates against available dates in the nav worksheet
     date_column = [row[0] for row in data]
     available_dates = {
         datetime.strptime(date, '%d/%m/%Y').date() for date in date_column[1:]
@@ -56,7 +56,7 @@ def get_date_range():
         try:
             from_date_str = input("From Date (dd/mm/yyyy): \n")
 
-            "Change string to date format"
+            # Change string to date format
             from_date_object = datetime.strptime(
                 from_date_str,
                 '%d/%m/%Y'
@@ -64,18 +64,18 @@ def get_date_range():
 
             to_date_str = input("To Date (dd/mm/yyyy): \n")
 
-            "Change string to date format"
+            # Change string to date format
             to_date_object = datetime.strptime(
                 to_date_str,
                 '%d/%m/%Y'
             ).date()
 
-            "From date must be less than to date"
+            # From date must be less than to date
             if from_date_object >= to_date_object:
                 print("From Date must be less than To Date...")
                 continue
 
-            "Verifies user entry against available data"
+            # Verifies user entry against available data
             if (
                 from_date_object not in available_dates
                 or to_date_object not in available_dates
@@ -153,7 +153,7 @@ def calculate_total_variable_fees(
             rate = float(rate)
         variable_rates.append(round(rate, 4))  # append to 4 decimal places
 
-    "Multiplies sum of var rates (average NAV * rate * day count / 366)"
+    # Multiplies sum of var rates (average NAV * rate * day count / 366)
     total_variable = 0
     for rate in variable_rates:
         total_variable += (average_nav * rate * day_count) / (len(data)-1)
@@ -205,9 +205,9 @@ def insert_results(
         ter_format
     ]
 
-    "Overwrites row 2 on the TER worksheet"
+    # Overwrites row 2 on the TER worksheet
     ter_sheet.update(range_name='A2:I2', values=[ter_row])
-    "Append latest result to create history of runs in run history worksheet"
+    # Append latest result to create history of runs in run history worksheet
     ter_history.append_row(ter_row)
 
 
@@ -223,10 +223,10 @@ def main():
     print(f"Fund number: {fund_number}\n")
     print(f"Fund name: {fund_name}\n")
 
-    "Gets the NAVs available for that date range"
+    # Gets the NAVs available for that date range
     filtered_navs = filter_nav_by_date_range(data, from_date, to_date)
 
-    "If filtered NAVs available, calculate average NAV (ANA) for that period"
+    # If filtered NAVs available, calculate average NAV (ANA) for that period
     if filtered_navs:
         average_nav = sum(filtered_navs) / len(filtered_navs)
         print(
@@ -235,7 +235,7 @@ def main():
     else:
         print("No data available for that date range....\n")
 
-    "Calculates fixed expenses for the period defined by user"
+    # Calculates fixed expenses for the period defined by user
     total_fixed_expenses = calculate_fixed_expenses_for_period(
         f_data,
         data,
@@ -246,7 +246,7 @@ def main():
         f"Fixed fees for the period were €{total_fixed_expenses: ,.2f}\n"
     )
 
-    "Calculates variable expenses for the period defined by user"
+    # Calculates variable expenses for the period defined by user
     variable_rates, total_variable_expenses = calculate_total_variable_fees(
         v_data,
         data,
@@ -258,15 +258,15 @@ def main():
         f"Variable fees for the period were €{total_variable_expenses: ,.2f}\n"
     )
 
-    "Calculates total expenses for the period defined by user"
+    # Calculates total expenses for the period defined by user
     total_expenses = total_fixed_expenses + total_variable_expenses
     print(f"Total fees for the period were €{total_expenses: ,.2f}\n")
 
-    "Calculates total expense ratio (TER)"
+    # Calculates total expense ratio (TER)
     ter = (total_expenses / average_nav) * 100
     print(f"Total Expense Ratio for the period is{ter: .4f}%\n")
 
-    "Pushes results to the TER worksheet"
+    # Pushes results to the TER worksheet
     ter_sheet = SHEET.worksheet("TER")  # TER worksheet
     ter_history = SHEET.worksheet("run history")  # TER History worksheet
     insert_results(
