@@ -169,6 +169,9 @@ def format_number(number):
 
 
 def format_percent(number):
+    """
+    Amends TER figure to reflect 4 decimal places and a % sign
+    """
     return "{:.4f}%".format(number)  # returns number to 4 decimals with '%'
 
 
